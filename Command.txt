@@ -1,0 +1,10 @@
+touch .gitignore
+git config --global user.name Kalki
+git config --global user.name "teja.kalki@gmail.com"
+git init
+git add .
+git commit -m "Initial Commit"
+git status
+ssh-keygen -t rsa -b 4096 -C "teja.kalki@gmail.com"
+cat ssh-keygen -t rsa -b 4096 -C "teja.kalki@gmail.com" #add the ssh key to github
+git remote add origin git@github.com:Kalki-Teja-Patimidi/Twitter_Scraper.git
