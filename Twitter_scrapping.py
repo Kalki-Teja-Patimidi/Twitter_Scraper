@@ -3,6 +3,8 @@ import pandas as pd
 import snscrape.modules.twitter as sntwitter
 from datetime import datetime, timedelta
 from pymongo import MongoClient
+import json
+from bson import ObjectId
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
@@ -30,12 +32,7 @@ def scrape_twitter_data(keyword, since_date, until_date, limit):
             "id": tweet.id,
             "url": tweet.url,
             "content": tweet.content,
-            "user": tweet.username,
-            # "reply_count": tweet.replyCount,
-            # "retweet_count": tweet.retweetCount,
-            # "language": tweet.lang,
-            # "source": tweet.sourceLabel,
-            # "like_count": tweet.likeCount
+            "user": tweet.username
         })
 
     # Store tweets in MongoDB
@@ -51,6 +48,9 @@ def store_data_in_mongodb(keyword, since_date, until_date, tweets):
         return
     collection_name = f"{keyword}_{since_date}_{until_date}"
     collection = db[collection_name]
+    collection.insert_many(tweets)
+    for tweet in tweets:
+        tweet['_id'] = str(tweet['_id'])
     collection.insert_many(tweets)
 
 
@@ -72,8 +72,8 @@ def app():
         st.write(tweets_df)
 
         # Download Twitter data as CSV or JSON
-        csv_data = tweets_df.to_csv(index=False)
-        json_data = tweets_df.to_json(orient="records")
+        csv_data = tweets_df.to_csv(index=False, encoding='latin1')
+        json_data = tweets_df.to_json(orient='split')
 
         st.download_button(
             label="Download CSV",
