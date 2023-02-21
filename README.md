@@ -5,7 +5,7 @@
 - These instructions will get you a copy of the project up and running on your local machine.
 
 ##### Prerequisites
-- Python 3.x
+- Python 3.8.10 [For Streamlit to Run without any API error]
 - MongoDB
 
 ### Installing
